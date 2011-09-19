@@ -1,12 +1,14 @@
-;; Flymake support for coffee script
+;;; flymake-coffee.el --- Flymake support for coffee script
 ;;
-;; Author: Steve Purcell <steve at sanityinc dot com>
+;;; Author: Steve Purcell <steve@sanityinc.com>
+;;; Homepage: https://github.com/purcell/flymake-coffee
+;;; Version: 0.1
 ;;
-;; Homepage: https://github.com/purcell/flymake-coffee
+;;; Commentary:
 ;;
 ;; Based in part on http://d.hatena.ne.jp/antipop/20110508/1304838383
 ;;
-;; Usage: (add-hook 'coffee-mode-hook '(lambda () (flymake-coffee-load)))
+;; Usage: (add-hook 'coffee-mode-hook 'flymake-coffee-load)
 
 (defconst flymake-allowed-coffee-file-name-masks '(("\\.coffee$" flymake-coffee-init)))
 
@@ -34,3 +36,4 @@
 
 
 (provide 'flymake-coffee)
+;;; flymake-coffee.el ends here
