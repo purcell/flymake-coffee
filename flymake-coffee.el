@@ -2,34 +2,37 @@
 ;;
 ;;; Author: Steve Purcell <steve@sanityinc.com>
 ;;; Homepage: https://github.com/purcell/flymake-coffee
-;;; Version: 0.1
+;;; Version: DEV
 ;;
 ;;; Commentary:
 ;;
 ;; Based in part on http://d.hatena.ne.jp/antipop/20110508/1304838383
 ;;
 ;; Usage: (add-hook 'coffee-mode-hook 'flymake-coffee-load)
+(require 'flymake)
 
-(defconst flymake-allowed-coffee-file-name-masks '(("\\.coffee$" flymake-coffee-init)))
+;; Doesn't strictly require coffee-mode, but will use 'coffee-command if set
 
-(defvar flymake-coffee-err-line-patterns
+(defconst flymake-coffee-err-line-patterns
   '(("\\(Error: In \\([^,]+\\), .+ on line \\([0-9]+\\).*\\)" 2 3 nil 1)))
 
-(defun flymake-coffee-create-temp-in-system-tempdir (filename prefix)
-  (make-temp-file (or prefix "flymake-coffee")))
-
 (defun flymake-coffee-init ()
-  (list "coffee" (list (flymake-init-create-temp-buffer-copy
-                        'flymake-coffee-create-temp-in-system-tempdir))))
+  (list (if (boundp 'coffee-command)
+            coffee-command
+          "coffee")
+        (list (flymake-init-create-temp-buffer-copy
+               'flymake-create-temp-inplace))))
 
+;;;###autoload
 (defun flymake-coffee-load ()
+  "Configure flymake mode to check the current buffer's coffeescript syntax.
+
+This function is designed to be called in `coffee-mode-hook'; it
+does not alter flymake's global configuration, so `flymake-mode'
+alone will not suffice."
   (interactive)
-  (require 'flymake)
-  (defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
-    (setq flymake-check-was-interrupted t))
-  (ad-activate 'flymake-post-syntax-check)
-  (setq flymake-allowed-file-name-masks (append flymake-allowed-file-name-masks flymake-allowed-coffee-file-name-masks))
-  (setq flymake-err-line-patterns flymake-coffee-err-line-patterns)
+  (set (make-local-variable 'flymake-allowed-file-name-masks) '(("." flymake-coffee-init)))
+  (set (make-local-variable 'flymake-err-line-patterns) flymake-coffee-err-line-patterns)
   (if (executable-find "coffee")
       (flymake-mode t)
     (message "Not enabling flymake: coffee command not found")))
