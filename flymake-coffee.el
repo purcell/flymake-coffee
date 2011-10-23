@@ -11,12 +11,15 @@
 ;; Usage: (add-hook 'coffee-mode-hook 'flymake-coffee-load)
 (require 'flymake)
 
+;;; Code:
+
 ;; Doesn't strictly require coffee-mode, but will use 'coffee-command if set
 
 (defconst flymake-coffee-err-line-patterns
   '(("\\(Error: In \\([^,]+\\), .+ on line \\([0-9]+\\).*\\)" 2 3 nil 1)))
 
 (defun flymake-coffee-init ()
+  "Construct a command that flymake can use to check coffeescript source."
   (list (if (boundp 'coffee-command)
             coffee-command
           "coffee")
@@ -28,8 +31,8 @@
   "Configure flymake mode to check the current buffer's coffeescript syntax.
 
 This function is designed to be called in `coffee-mode-hook'; it
-does not alter flymake's global configuration, so `flymake-mode'
-alone will not suffice."
+does not alter flymake's global configuration, so function
+`flymake-mode' alone will not suffice."
   (interactive)
   (set (make-local-variable 'flymake-allowed-file-name-masks) '(("." flymake-coffee-init)))
   (set (make-local-variable 'flymake-err-line-patterns) flymake-coffee-err-line-patterns)
