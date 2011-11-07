@@ -18,13 +18,21 @@
 (defconst flymake-coffee-err-line-patterns
   '(("\\(Error: In \\([^,]+\\), .+ on line \\([0-9]+\\).*\\)" 2 3 nil 1)))
 
+(defun flymake-coffee--create-temp-in-system-tempdir (file-name prefix)
+  "Return a temporary file name into which flymake can save buffer contents.
+
+This is tidier than `flymake-create-temp-inplace', and therefore
+preferable when the checking doesn't depend on the file's exact
+location."
+  (make-temp-file (or prefix "flymake-coffee") nil ".coffee"))
+
 (defun flymake-coffee-init ()
   "Construct a command that flymake can use to check coffeescript source."
   (list (if (boundp 'coffee-command)
             coffee-command
           "coffee")
         (list (flymake-init-create-temp-buffer-copy
-               'flymake-create-temp-inplace))))
+               'flymake-coffee--create-temp-in-system-tempdir))))
 
 ;;;###autoload
 (defun flymake-coffee-load ()
