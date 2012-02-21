@@ -26,11 +26,15 @@ preferable when the checking doesn't depend on the file's exact
 location."
   (make-temp-file (or prefix "flymake-coffee") nil ".coffee"))
 
+(defun flymake-coffee-command ()
+  "Return the location of the user's 'coffee' executable, using 'coffee-command if available."
+  (if (boundp 'coffee-command)
+      coffee-command
+    "coffee"))
+
 (defun flymake-coffee-init ()
   "Construct a command that flymake can use to check coffeescript source."
-  (list (if (boundp 'coffee-command)
-            coffee-command
-          "coffee")
+  (list (flymake-coffee-command)
         (list (flymake-init-create-temp-buffer-copy
                'flymake-coffee--create-temp-in-system-tempdir))))
 
@@ -44,7 +48,7 @@ does not alter flymake's global configuration, so function
   (interactive)
   (set (make-local-variable 'flymake-allowed-file-name-masks) '(("." flymake-coffee-init)))
   (set (make-local-variable 'flymake-err-line-patterns) flymake-coffee-err-line-patterns)
-  (if (executable-find "coffee")
+  (if (executable-find (flymake-coffee-command))
       (flymake-mode t)
     (message "Not enabling flymake: coffee command not found")))
 
