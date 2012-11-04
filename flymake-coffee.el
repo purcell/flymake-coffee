@@ -13,6 +13,8 @@
 ;;   (require 'flymake-coffee)
 ;;   (add-hook 'coffee-mode-hook 'flymake-coffee-load)
 ;;
+;; Executes "coffeelint" if available, otherwise "coffee".
+;;
 ;; Uses flymake-easy, from https://github.com/purcell/flymake-easy
 
 ;;; Code:
@@ -21,12 +23,18 @@
 ;; Doesn't strictly require coffee-mode, but will use 'coffee-command if set
 
 (defconst flymake-coffee-err-line-patterns
-  '(("^SyntaxError: In \\([^,]+\\), \\(.+\\) on line \\([0-9]+\\)" 1 3 nil 2)))
+  '(;; coffee
+    ("^SyntaxError: In \\([^,]+\\), \\(.+\\) on line \\([0-9]+\\)" 1 3 nil 2)
+    ;; coffeelint
+    ("SyntaxError: \\(.*\\) on line \\([0-9]+\\)" nil 2 nil 1)
+    ("\\(.+\\),\\([0-9]+\\),\\(?:warn\\|error\\),\\(.+\\)" 1 2 nil 3)))
 
 (defun flymake-coffee-command (filename)
   "Construct a command that flymake can use to check coffeescript source."
-  (list (if (boundp 'coffee-command) coffee-command "coffee")
-        filename))
+  (if (executable-find "coffeelint")
+      (list "coffeelint" "--csv" filename)
+    (list (if (boundp 'coffee-command) coffee-command "coffee")
+          filename)))
 
 ;;;###autoload
 (defun flymake-coffee-load ()
