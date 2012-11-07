@@ -27,7 +27,7 @@
     ("^SyntaxError: In \\([^,]+\\), \\(.+\\) on line \\([0-9]+\\)" 1 3 nil 2)
     ;; coffeelint
     ("SyntaxError: \\(.*\\) on line \\([0-9]+\\)" nil 2 nil 1)
-    ("\\(.+\\),\\([0-9]+\\),\\(?:warn\\|error\\),\\(.+\\)" 1 2 nil 3)))
+    ("\\(.+\\),\\([0-9]+\\),\\(\\(warn\\|error\\),.+\\)" 1 2 nil 3)))
 
 (defun flymake-coffee-command (filename)
   "Construct a command that flymake can use to check coffeescript source."
@@ -43,7 +43,11 @@
   (flymake-easy-load 'flymake-coffee-command
                      flymake-coffee-err-line-patterns
                      'tempdir
-                     "coffee"))
+                     "coffee")
+  ;; for https://github.com/illusori/emacs-flymake
+  (set (make-local-variable 'flymake-warn-line-regexp) "^warn")
+  ;; for emacs24 bzr-108160
+  (set (make-local-variable 'flymake-warn-line-re) "^warn"))
 
 
 (provide 'flymake-coffee)
