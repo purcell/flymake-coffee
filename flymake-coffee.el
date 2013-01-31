@@ -22,6 +22,11 @@
 (require 'flymake-easy)
 ;; Doesn't strictly require coffee-mode, but will use 'coffee-command if set
 
+(defcustom flymake-coffee-coffeelint-configuration-file nil
+  "File that contains custom coffeelint configuration"
+  :type 'string
+  :group 'flymake-coffee)
+
 (defconst flymake-coffee-err-line-patterns
   '(;; coffee
     ("^SyntaxError: In \\([^,]+\\), \\(.+\\) on line \\([0-9]+\\)" 1 3 nil 2)
@@ -32,7 +37,9 @@
 (defun flymake-coffee-command (filename)
   "Construct a command that flymake can use to check coffeescript source."
   (if (executable-find "coffeelint")
-      (list "coffeelint" "--csv" filename)
+      (if flymake-coffee-coffeelint-configuration-file
+          (list "coffeelint" "-f" flymake-coffee-coffeelint-configuration-file "--csv" filename)
+        (list "coffeelint" "--csv" filename))
     (list (if (boundp 'coffee-command) coffee-command "coffee")
           filename)))
 
