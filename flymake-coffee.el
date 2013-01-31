@@ -22,8 +22,13 @@
 (require 'flymake-easy)
 ;; Doesn't strictly require coffee-mode, but will use 'coffee-command if set
 
+(defgroup flymake-coffee nil
+  "Flymake support for CoffeeScript"
+  :prefix "flymake-coffee-"
+  :group 'flymake)
+
 (defcustom flymake-coffee-coffeelint-configuration-file nil
-  "File that contains custom coffeelint configuration"
+  "File that contains custom coffeelint configuration."
   :type 'string
   :group 'flymake-coffee)
 
