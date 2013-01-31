@@ -37,9 +37,10 @@
 (defun flymake-coffee-command (filename)
   "Construct a command that flymake can use to check coffeescript source."
   (if (executable-find "coffeelint")
-      (if flymake-coffee-coffeelint-configuration-file
-          (list "coffeelint" "-f" flymake-coffee-coffeelint-configuration-file "--csv" filename)
-        (list "coffeelint" "--csv" filename))
+      (append '("coffeelint")
+              (when flymake-coffee-coffeelint-configuration-file
+                (list "-f" flymake-coffee-coffeelint-configuration-file))
+              (list "--csv" filename))
     (list (if (boundp 'coffee-command) coffee-command "coffee")
           filename)))
 
