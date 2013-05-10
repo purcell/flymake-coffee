@@ -1,4 +1,4 @@
-flymake-python-pyflakes.el
+flymake-coffee.el
 ==========================
 
 An Emacs flymake handler for syntax-checking Coffeescript source code
