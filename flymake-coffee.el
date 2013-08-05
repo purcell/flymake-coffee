@@ -28,7 +28,8 @@
   :group 'flymake)
 
 (defcustom flymake-coffee-coffeelint-configuration-file nil
-  "File that contains custom coffeelint configuration."
+  "File that contains custom coffeelint configuration.
+Must be a full path, so use `expand-file-name' if you want to use \"~\" etc."
   :type 'string
   :group 'flymake-coffee)
 
