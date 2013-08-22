@@ -38,7 +38,7 @@ Must be a full path, so use `expand-file-name' if you want to use \"~\" etc."
     ("^SyntaxError: In \\([^,]+\\), \\(.+\\) on line \\([0-9]+\\)" 1 3 nil 2)
     ;; coffeelint
     ("SyntaxError: \\(.*\\) on line \\([0-9]+\\)" nil 2 nil 1)
-    ("\\(.+\\),\\([0-9]+\\),\\(\\(warn\\|error\\),.+\\)" 1 2 nil 3)))
+    ("\\(.+\\),\\([0-9]+\\)\\(?:,[0-9]+\\)?,\\(\\(warn\\|error\\),.+\\)" 1 2 nil 3)))
 
 (defun flymake-coffee-command (filename)
   "Construct a command that flymake can use to check coffeescript source."
