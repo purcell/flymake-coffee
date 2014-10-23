@@ -24,7 +24,7 @@ Add the following to your emacs init file:
 Uses `coffeelint` if available, otherwises `coffee`.
 
 [marmalade]: http://marmalade-repo.org
-[melpa]: http://melpa.milkbox.net
+[melpa]: http://melpa.org
 
 <hr>
 
